@@ -60,12 +60,12 @@
 
   <div id="alert-box" class="alert hidden"></div>
 
-  <!-- เข้าสู่ระบบ / สมัครใช้งาน -->
+  <!-- View: Auth -->
   <div id="view-auth" class="card">
     <h2 style="margin-bottom: 16px;">เข้าสู่ระบบ / สมัครใช้งาน</h2>
     <div class="form-group">
       <label>รหัสนักศึกษา (11 หลัก) หรืออีเมลผู้สอน:</label>
-      <input type="text" id="auth-identity" placeholder="เช่น 67115271101 หรือ teacher@snru.ac.th">
+      <input type="text" id="auth-identity" placeholder="เช่น 67115271113 หรือ teacher@snru.ac.th">
     </div>
     <div class="form-group">
       <label>รหัสผ่าน:</label>
@@ -75,10 +75,10 @@
       <button class="btn" onclick="handleLogin()">เข้าสู่ระบบ</button>
       <button class="btn btn-secondary" onclick="handleRegister()">สมัครใช้งาน (สำหรับนักศึกษา)</button>
     </div>
-    <small style="display:block; margin-top: 12px; color: var(--text-muted);">* นักศึกษาต้องใช้รหัส 11 หลักที่มีในรายชื่อวิชาเท่านั้น</small>
+    <small style="display:block; margin-top: 12px; color: var(--text-muted);">* ระบบรองรับรหัสนักศึกษา 11 หลัก และจะเข้าสู่ระบบทันทีหลังสมัคร</small>
   </div>
 
-  <!-- พอร์ทัลนักศึกษา -->
+  <!-- View: Student Portal -->
   <div id="view-student" class="hidden">
     <div class="card">
       <h3>ข้อมูลผู้เรียน</h3>
@@ -102,11 +102,13 @@
       </div>
     </div>
 
+    <!-- Lesson Content Display -->
     <div id="unit-content" class="card hidden">
       <h2 id="unit-title">หัวข้อหน่วย</h2>
       <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--border);">
       <div id="unit-body">เนื้อหาบทเรียน</div>
       
+      <!-- AR Viewer for Unit 4 -->
       <div id="ar-viewer-container" class="hidden">
         <model-viewer id="model-view" alt="โมเดล 3D" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1">
           <button slot="ar-button" class="btn" style="position: absolute; bottom: 16px; right: 16px;">เปิดโหมดกล้อง AR</button>
@@ -130,12 +132,14 @@
       </div>
     </div>
 
+    <!-- Quiz Display -->
     <div id="quiz-container" class="card hidden">
       <h3 id="quiz-header">แบบทดสอบ</h3>
       <div id="quiz-questions" style="margin-top: 16px;"></div>
       <button class="btn" style="margin-top: 16px;" onclick="submitQuiz()">ส่งคำตอบ</button>
     </div>
 
+    <!-- Results Display -->
     <div id="student-results" class="card hidden">
       <h3>ผลการประเมิน</h3>
       <p id="pre-score-text">คะแนนก่อนเรียน: -</p>
@@ -145,7 +149,7 @@
     </div>
   </div>
 
-  <!-- พอร์ทัลผู้สอน -->
+  <!-- View: Teacher Portal -->
   <div id="view-teacher" class="hidden">
     <div class="card">
       <h2>ระบบจัดการสำหรับผู้สอน</h2>
@@ -189,28 +193,28 @@
   const UNITS = {
     1: {
       title: 'หน่วยที่ 1: พื้นฐานความจริงเสริม (Augmented Reality)',
-      body: 'นิยามของ AR ตามแนวคิดของ Azuma (1997) ประกอบด้วย 3 องค์ประกอบหลัก: รวมของจริงเข้ากับของเสมือน, ตอบสนองแบบเรียลไทม์, และลงตำแหน่งในพิกัดสามมิติ โดยมีแกนต่อเนื่องระหว่างโลกจริงกับโลกเสมือนตาม Milgram & Kishino (1994)',
+      body: 'นิยามของ AR ตามแนวคิดของ Azuma (1997) ประกอบด้วย 3 องค์ประกอบหลัก: รวมของจริงเข้ากับของเสมือน (Combines real and virtual), ตอบสนองแบบเรียลไทม์ (Interactive in real time), และลงตำแหน่งในพิกัดสามมิติ (Registered in 3D) โดยมีแกนต่อเนื่องระหว่างโลกจริงกับโลกเสมือนตาม Milgram & Kishino (1994)',
       q: 'ข้อใดคือคุณลักษณะของ AR ตามคำนิยามของ Azuma (1997)?',
       opts: ['ตัดขาดจากโลกความเป็นจริงโดยสิ้นเชิง', 'รวมสิ่งจริงกับสิ่งเสมือน โต้ตอบทันที และลงตำแหน่งแบบ 3D', 'ต้องใช้งานผ่านแว่นตาเท่านั้น', 'แสดงผลเฉพาะข้อความ 2 มิติ'],
       ans: 1
     },
     2: {
       title: 'หน่วยที่ 2: ชนิดและเทคโนโลยีของ AR',
-      body: 'ประเภทของ AR แบ่งตามเทคนิคการตรวจจับ: Marker-based, Markerless, Location-based, และ Projection-based พร้อมการพัฒนาผ่าน WebAR',
+      body: 'ประเภทของ AR แบ่งตามเทคนิคการตรวจจับ: Marker-based (ใช้สัญลักษณ์มาร์กเกอร์), Markerless (ตรวจจับพื้นผิวระนาบ), Location-based (ใช้พิกัดดาวเทียม GPS), และ Projection-based (ฉายแสงลงบนพื้นผิวจริง) พร้อมการพัฒนาผ่าน WebAR',
       q: 'WebAR แตกต่างจาก Native App อย่างไร?',
       opts: ['WebAR ทำงานผ่านเว็บเบราว์เซอร์ได้ทันที ไม่ต้องติดตั้งแอป', 'WebAR มีกราฟิกสมจริงกว่า Native App เสมอ', 'WebAR ไม่ต้องใช้กล้องโทรศัพท์', 'WebAR รองรับเฉพาะคอมพิวเตอร์ตั้งโต๊ะ'],
       ans: 0
     },
     3: {
       title: 'หน่วยที่ 3: การออกแบบสื่อ AR เพื่อการเรียนรู้',
-      body: 'การออกแบบต้องลดภาระทางปัญญาที่ไม่จำเป็น (Cognitive Load) ตามทฤษฎีของ Mayer โดยคำนึงถึงประสบการณ์ผู้ใช้ และต้องมีทางเลือกสำรองสำหรับอุปกรณ์ที่ไม่รองรับ',
+      body: 'การออกแบบต้องลดภาระทางปัญญาที่ไม่จำเป็น (Extraneous Cognitive Load) ตามทฤษฎีการเรียนรู้มัลติมีเดียของ Mayer โดยคำนึงถึงประสบการณ์ผู้ใช้ และต้องมีทางเลือกสำรองสำหรับผู้เรียนที่อุปกรณ์ไม่รองรับการทำงานของกล้อง',
       q: 'ข้อใดเป็นหลักการสำคัญที่สุดในการออกแบบสื่อ AR ทางการศึกษา?',
       opts: ['ใส่โมเดล 3D ให้เยอะที่สุดเพื่อดึงดูดสายตา', 'ตั้งวัตถุประสงค์การเรียนรู้ให้ชัดเจนก่อนเลือกใช้เทคโนโลยี', 'บังคับให้ผู้เรียนทุกคนซื้อโทรศัพท์รุ่นใหม่', 'เน้นแอนิเมชันความเร็วสูง'],
       ans: 1
     },
     4: {
       title: 'หน่วยที่ 4: การปฏิบัติการสร้างสื่อ WebAR พื้นฐาน',
-      body: 'การใช้งานคอมโพเนนต์ <model-viewer> สำหรับแสดงผลโมเดล 3D รูปแบบ .glb ผ่านเบราว์เซอร์ และเปิดกล้องเพื่อวางในพื้นที่จริงผ่าน Scene Viewer หรือ WebXR',
+      body: 'การใช้งานคอมโพเนนต์ <model-viewer> สำหรับแสดงผลโมเดล 3D รูปแบบ .glb ผ่านเบราว์เซอร์ และสามารถเปิดกล้องเพื่อวางในพื้นที่จริงผ่านเทคโนโลยี WebXR หรือ Scene Viewer',
       hasAR: true,
       q: 'ไฟล์นามสกุลมาตรฐานใดที่นิยมใช้แสดงผล 3D บน WebAR ผ่าน <model-viewer>?',
       opts: ['.exe', '.docx', '.glb', '.mp3'],
@@ -218,7 +222,7 @@
     },
     5: {
       title: 'หน่วยที่ 5: การทดสอบและประเมินสื่อ AR',
-      body: 'การหาคุณภาพเครื่องมือใช้เกณฑ์ IOC >= 0.50 (Rovinelli & Hambleton, 1977), ประสิทธิภาพตามเกณฑ์ E1/E2 (80/80), และประสิทธิผลด้วยค่า Normalized Gain ตาม Hake (1998)',
+      body: 'การหาคุณภาพเครื่องมือใช้เกณฑ์ IOC >= 0.50 (Rovinelli & Hambleton, 1977), การหาประสิทธิภาพตามเกณฑ์ E1/E2 (80/80), และการหาประสิทธิผลทางการเรียนรู้ด้วยค่า Normalized Gain ตามแนวคิดของ Hake (1998)',
       q: 'เกณฑ์ความสอดคล้องเชิงเนื้อหา (IOC) ที่ยอมรับได้ต้องมีค่าเท่าใดขึ้นไป?',
       opts: ['0.20', '0.50', '0.80', '1.00'],
       ans: 1
@@ -271,7 +275,8 @@
   }
 
   async function handleLogin() {
-    const ident = document.getElementById('auth-identity').value.trim();
+    const rawIdent = document.getElementById('auth-identity').value;
+    const ident = rawIdent.replace(/[^a-zA-Z0-9@._-]/g, '').trim();
     const password = document.getElementById('auth-password').value;
     const email = ident.includes('@') ? ident : `${ident}@${DOMAIN}`;
 
@@ -284,10 +289,11 @@
   }
 
   async function handleRegister() {
-    const studentId = document.getElementById('auth-identity').value.trim();
+    const rawId = document.getElementById('auth-identity').value;
+    const studentId = rawId.replace(/[^0-9]/g, '').trim();
     const password = document.getElementById('auth-password').value;
 
-    if (!/^[0-9]{11}\$/.test(studentId)) {
+    if (studentId.length !== 11) {
       showAlert('รหัสนักศึกษาต้องเป็นตัวเลข 11 หลักเท่านั้น', true);
       return;
     }
@@ -297,8 +303,19 @@
     if (error) {
       showAlert(`การลงทะเบียนล้มเหลว: ${error.message}`, true);
     } else {
+      if (data && data.user) {
+        // ลงทะเบียนรายชื่อในตาราง students อัตโนมัติหากยังไม่มีข้อมูล
+        await sb.from('students').upsert({
+          id: studentId,
+          title: 'นักศึกษา',
+          first_name: 'รหัส',
+          last_name: studentId,
+          section: '1',
+          user_id: data.user.id
+        }, { onConflict: 'id' });
+      }
       showAlert('ลงทะเบียนสำเร็จ กำลังเข้าสู่ระบบ...');
-      location.reload();
+      setTimeout(() => location.reload(), 1200);
     }
   }
 
@@ -311,6 +328,9 @@
     const { data } = await sb.from('students').select('*').eq('user_id', currentUser.id).single();
     if (data) {
       document.getElementById('student-name').innerText = `ผู้เรียน: ${escapeHTML(data.title || '')} ${escapeHTML(data.first_name)} ${escapeHTML(data.last_name)} (รหัส ${data.id})`;
+    } else {
+      const studentId = currentUser.email.split('@')[0];
+      document.getElementById('student-name').innerText = `ผู้เรียน: รหัสประจำตัว ${studentId}`;
     }
   }
 
